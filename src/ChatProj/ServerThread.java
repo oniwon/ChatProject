@@ -171,23 +171,41 @@ public class ServerThread extends Thread {
 
 
     // 방 입장 메서드: /join [방번호]
+//    public void enterRoom(String msg, String nickname) {
+//        String[] str = msg.split(" ");
+//        String roomNumberString = str[1];
+////        if (roomNumberString.startsWith("[") && roomNumberString.endsWith("]")) {
+////            roomNumberString = roomNumberString.substring(1, roomNumberString.length() - 1);
+////        }
+//        roomNumber = Integer.parseInt(roomNumberString);
+//
+//        List<Member> membersInRoom = rooms.get(roomNumber);
+//        if (membersInRoom == null) {
+//            membersInRoom = new ArrayList<>();
+//            rooms.put(roomNumber, membersInRoom);
+//        }
+//        membersInRoom.add(new Member(socket, nickname));
+//
+//        broadCast(roomNumber, nickname + "님이 방에 입장했습니다.");
+//    }
+
+    // 방 입장 메서드: /join [방번호]
     public void enterRoom(String msg, String nickname) {
         String[] str = msg.split(" ");
         String roomNumberString = str[1];
-//        if (roomNumberString.startsWith("[") && roomNumberString.endsWith("]")) {
-//            roomNumberString = roomNumberString.substring(1, roomNumberString.length() - 1);
-//        }
         roomNumber = Integer.parseInt(roomNumberString);
 
         List<Member> membersInRoom = rooms.get(roomNumber);
         if (membersInRoom == null) {
-            membersInRoom = new ArrayList<>();
-            rooms.put(roomNumber, membersInRoom);
+            // 채팅방이 존재하지 않는 경우 새로 생성
+            createRoom(nickname);
+        } else {
+            // 채팅방이 존재하고 이미 사용자가 존재하는 경우
+            membersInRoom.add(new Member(socket, nickname));
+            broadCast(roomNumber, nickname + "님이 방에 입장했습니다.");
         }
-        membersInRoom.add(new Member(socket, nickname));
-
-        broadCast(roomNumber, nickname + "님이 방에 입장했습니다.");
     }
+
 
     // 방 나가기 메서드
     public void exitRoom(String nickname) {
