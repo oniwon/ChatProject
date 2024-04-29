@@ -171,28 +171,12 @@ public class ServerThread extends Thread {
 
 
     // 방 입장 메서드: /join [방번호]
-//    public void enterRoom(String msg, String nickname) {
-//        String[] str = msg.split(" ");
-//        String roomNumberString = str[1];
-////        if (roomNumberString.startsWith("[") && roomNumberString.endsWith("]")) {
-////            roomNumberString = roomNumberString.substring(1, roomNumberString.length() - 1);
-////        }
-//        roomNumber = Integer.parseInt(roomNumberString);
-//
-//        List<Member> membersInRoom = rooms.get(roomNumber);
-//        if (membersInRoom == null) {
-//            membersInRoom = new ArrayList<>();
-//            rooms.put(roomNumber, membersInRoom);
-//        }
-//        membersInRoom.add(new Member(socket, nickname));
-//
-//        broadCast(roomNumber, nickname + "님이 방에 입장했습니다.");
-//    }
-
-    // 방 입장 메서드: /join [방번호]
     public void enterRoom(String msg, String nickname) {
         String[] str = msg.split(" ");
         String roomNumberString = str[1];
+//        if (roomNumberString.startsWith("[") && roomNumberString.endsWith("]")) {
+//            roomNumberString = roomNumberString.substring(1, roomNumberString.length() - 1);
+//        }
         roomNumber = Integer.parseInt(roomNumberString);
 
         List<Member> membersInRoom = rooms.get(roomNumber);
@@ -200,7 +184,7 @@ public class ServerThread extends Thread {
             // 채팅방이 존재하지 않는 경우 새로 생성
             createRoom(nickname);
         } else {
-            // 채팅방이 존재하고 이미 사용자가 존재하는 경우
+            // 채팅방이 존재하고 이미 사용자가 존재하는 경우(/create 로 들어간 사용자)
             membersInRoom.add(new Member(socket, nickname));
             broadCast(roomNumber, nickname + "님이 방에 입장했습니다.");
         }
@@ -219,7 +203,7 @@ public class ServerThread extends Thread {
                     out.println("방 번호 [" + roomNumber + "] 번이 삭제되었습니다.");
                 }
             }
-            roomNumber = null; // 방을 나갔으므로 현재 방 번호를 null로 설정
+            roomNumber = null; // 방을 나간 사용자들의 현재 방 번호를 null 로 설정 -> 채팅x
         }
     }
 }
